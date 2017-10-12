@@ -1,0 +1,79 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Oct 11 11:42:28 2017
+
+@author: lakshmi
+"""
+# numpy
+import numpy as np
+
+# The correlation integral as a function of tau and l
+# Tau is the time lag
+# l is the characteristic distance to which we compare other distances
+xt = np.load('/home/lakshmi/python/xoft.npy')
+lt = 20
+Tau = 10
+M = 150
+
+
+# I also have to define a time window, this is what is going to replace len(x)
+def timewin(x, m):
+    X = x[0: m]   # a part of the the time series
+    return np.array(X)
+
+
+# time lagged time series
+def y(x, tau, m):
+    """ this generates the time lagged time series with a lag of tau"""
+    xt = x
+    M = m
+    X = timewin(xt, M)
+    for i in range(len(X)):
+        y[i] = x[i+tau]
+    return np.array(y)
+
+
+# now defining the distance between 2 points of the array
+def dist(x, y, ltw):
+    """ Returns an array of the distance between different points of y and x"""
+    X = timewin(xt, M)
+    for j in range(ltw):
+        for k in range(ltw):
+            d = abs(X[j] - y[k])
+    return np.array(d)
+
+
+# counting the number of pairs (j,k) whose distance is less than l
+def cn(d, l, ltw):
+    """ Assigns the number of pairs whose distance is lesser than l"""
+    for j in range(ltw):
+        for k in range(ltw):
+            if d[j, k] <= l:
+                return 1
+            else:
+                    return 0
+    return np.array(c)
+
+
+# suming the number of pairs
+def nump(c):
+    """ counts the number of pairs"""
+    n = sum(sum(c, []))
+    return n
+
+
+# the correlation integral
+def C(l, tau, ltw):
+    """ The correlation integral, as a function of the time lag tau, and l"""
+    cor = (1/((ltw)**2))*nump(c)
+    return cor
+
+
+a = timewin(xt, M)
+b = y(xt, Tau, M)
+d = dist(a, b, ltw=len(a))
+c = cn(d, lt, len(a))
+n = nump(c)
+L = C(lt, Tau, len(a))
+print L
